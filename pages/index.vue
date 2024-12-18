@@ -46,13 +46,14 @@
     </div>
   </section>
 
-  <section id="featured">
+  <section id="featured" v-if="productStore.products != null">
     <div class="container text-center mt-5 pt-5">
       <h3>Our Featured</h3>
       <hr>
       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
       <div class="row mx-auto content-fluid">
-        <Product :card_class="card_class" :Product_list="Product_featured_list" />
+        <Product card_class="col-lg-3 col-md-6"
+          :Product_list="productStore.products.filter((p) => p.category == 'featured')" />
       </div>
     </div>
   </section>
@@ -65,30 +66,26 @@
     </div>
   </section>
 
-  <section id="clothes">
+  <section id="clothes" v-if="productStore.products != null">
     <div class="container text-center mt-5 pt-5">
       <h3>Dresses & Jumpsuits</h3>
       <hr>
       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
       <div class="row mx-auto content-fluid">
-        <Product :card_class="card_class" :Product_list="Product_cloth_list" />
+        <Product card_class="col-lg-3 col-md-6"
+          :Product_list="productStore.products.filter((p) => p.category == 'cloth')" />
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { onMounted } from 'vue';
 import { useProductStore } from '@/stores/product';
 
 const productStore = useProductStore();
-const card_class = 'col-lg-3 col-md-6';
 
-const Product_featured_list = computed(() =>
-  productStore.data.filter((product) => product.category === 'featured')
-);
-
-const Product_cloth_list = computed(() =>
-  productStore.data.filter((product) => product.category === 'cloth')
-);
+onMounted(async () => {
+  await productStore.fetchProducts();  
+});
 </script>

@@ -5,20 +5,19 @@
             <hr class="mx-2">
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
         </div>
-        <div class="row mx-auto container">
-            <Product :card_class="card_class" :Product_list="Product_list" />
+        <div class="row mx-auto container" v-if="productStore.products != null">
+            <Product card_class="col-lg-3 col-md-6"
+                :Product_list="productStore.products.filter((p) => p.category == 'shop')" />
         </div>
     </section>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { onMounted } from 'vue';
 import { useProductStore } from '@/stores/product';
 
 const productStore = useProductStore();
-const card_class = 'col-lg-3 col-md-6';
-
-const Product_list = computed(() =>
-  productStore.data.filter((product) => product.category === 'shop')
-);
+onMounted(async () => {
+    await productStore.fetchProducts();
+}); 
 </script>
