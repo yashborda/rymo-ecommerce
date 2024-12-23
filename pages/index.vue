@@ -46,7 +46,7 @@
     </div>
   </section>
 
-  <section id="featured" v-if="productStore.products != null">
+  <section id="featured" v-if="productStore.products">
     <div class="container text-center mt-5 pt-5">
       <h3>Our Featured</h3>
       <hr>
@@ -66,7 +66,7 @@
     </div>
   </section>
 
-  <section id="clothes" v-if="productStore.products != null">
+  <section id="clothes" v-if="productStore.products">
     <div class="container text-center mt-5 pt-5">
       <h3>Dresses & Jumpsuits</h3>
       <hr>
@@ -82,10 +82,18 @@
 <script setup>
 import { onMounted } from 'vue';
 import { useProductStore } from '@/stores/product';
+import { fetchProductsApi } from "@/helpers/api/product";
 
 const productStore = useProductStore();
-
-onMounted(async () => {
-  await productStore.fetchProducts();  
+onMounted(() => {
+  fetchProductsApi();
+  // productsData();
 });
+
+const productsData = () => {
+  productStore.fetchProducts().then(() => {
+    console.log(productStore.products, "products");
+  });
+};
+
 </script>
